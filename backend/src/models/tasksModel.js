@@ -5,6 +5,11 @@ const getAll = async() => {
     return tasks;
 }
 
+const getById = async(id) => {
+    const task = await connection.execute('SELECT * FROM tasks WHERE id = ?', [id]);
+    return task;
+}
+
 const createTask = async(task) => {
     const {title} = task
     const dateUTC = new Date(Date.now()).toUTCString()
@@ -30,9 +35,18 @@ const updateTask = async(id, task) => {
     return updatedTask
 }
 
+const searchUser = async (email) => {
+    const [rows] = await connection.execute('SELECT * FROM usuarios WHERE email = ?', [email])
+    const usuario = rows[0]
+
+    return usuario
+}
+
 module.exports = {
     getAll,
+    getById,
     createTask,
     deleteTask,
     updateTask,
+    searchUser
 };
