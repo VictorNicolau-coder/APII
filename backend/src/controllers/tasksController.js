@@ -1,37 +1,35 @@
-const tasksModel = require('../models/tasksModel')
+const taskSchema = require('../models/taskSchema')
+const userSchema = require('../models/userSchema')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const PDFDocument = require("pdfkit")
 
 const getAll = async (request, response) => {
-    const [tasks] = await tasksModel.getAll()
+    const tasks = await taskSchema.find()
     return response.status(200).json(tasks)
 }
 
 const getById = async (request, response) => {
     const { id } = request.params
-
-    const [task] = await tasksModel.getById(id)
-
+    const task = await taskSchema.findById(id)
     return response.status(200).json(task)
 }
 
 const createTask = async (request, response) => {
-    const createdTask = await tasksModel.createTask(request.body)
-
+    const createdTask = await taskSchema.create(request.body)
     return response.status(201).json(createdTask)
 }
 
 const deleteTask = async (request, response) => {
     const { id } = request.params
-    await tasksModel.deleteTask(id)
-    return response.status(204).json()
+    const deletedTask = await taskSchema.findByIdAndDelete(id)
+    return response.status(204).json(deletedTask)
 }
 
 const updateTask = async (request, response) => {
     const { id } = request.params
 
-    const updatedTask = await tasksModel.updateTask(id, request.body)
+    const updatedTask = await taskSchema.findByIdAndUpdate(id, request.body, { new: true })
     return response.status(201).json(updatedTask)
 }
 
@@ -40,11 +38,11 @@ const searchLogin = async (request, response) => {
     try{
         const { email, senha } = request.body;
 
-        const usuario = await tasksModel.searchUser(email);
+        const usuario = await userSchema.findOne({email});
 
         if (!usuario) return response.status(401).json({erro: "User not found!"})
         
-        const senhaCorreta = await bcrypt.compare(senha, usuario.senha)
+        const senhaCorreta = await bcrypt.compare(senha, usuario.password)
         if(!senhaCorreta) return response.status(401).json({erro: "Incorrect password!"})
         
         const token = jwt.sign({ email: usuario.email }, 'segredo', { expiresIn: '1h' });
@@ -67,13 +65,13 @@ const gerarPdf = async (request, response) => {
     // “Encanamos” o PDF direto na resposta
     doc.pipe(response);
 
-    doc.fontSize(18).text("To Do List", { align: 'center' });
+    doc.fontSize(18).text("Lista de Tarefas", { align: 'center' });
     doc.moveDown();
 
-    const [tasks] = await tasksModel.getAll()
+    const tasks = await taskSchema.find()
 
     tasks.forEach(task => {
-        doc.fontSize(12).text(`ID: ${task.id} | ${task.title} - ${task.status} - ${task.created_at}`);
+        doc.fontSize(12).text(`ID: ${task.id} | ${task.title} - ${task.status} - ${task.created_at.toLocaleDateString()}`);
     });
 
     doc.end();

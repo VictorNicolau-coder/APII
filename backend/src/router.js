@@ -28,6 +28,7 @@ router.post(
     tasksMiddleware.validateTitle, 
     tasksController.createTask
 )
+
 router.delete(
     '/tasks/:id', 
     tasksMiddleware.authenticate,
@@ -42,6 +43,10 @@ router.put(
     tasksController.updateTask
 )
 
-router.get('/pdf', tasksMiddleware.authenticate, tasksController.gerarPdf)
+router.get(
+    '/pdf', 
+    tasksMiddleware.authenticate, 
+    tasksController.gerarPdf
+)
 
 module.exports = router
