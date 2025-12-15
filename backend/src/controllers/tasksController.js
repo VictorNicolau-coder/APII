@@ -49,8 +49,8 @@ const searchLogin = async (request, response) => {
         return response.status(200).json({ token });
 
     } catch (err){
-        console.error(err);
-        response.status(500).json({ erro: 'Erro interno no servidor' });
+        console.error();
+        response.status(500).json({ erro: err });
     }
     
 }
