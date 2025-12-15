@@ -25,8 +25,8 @@ const validateStatus = (request, response, next) => {
 const validateDay = (request, response, next) => {
     const diaAtual = new Date().getDay()
 
-    if (diaAtual == 6 || diaAtual == 1)
-        return response.status(403).json({erro: "Access denied!"})
+    if (diaAtual == 6 || diaAtual == 0)
+        return response.status(403).json({erro: "Access denied due date!"})
 
     next()
 }
