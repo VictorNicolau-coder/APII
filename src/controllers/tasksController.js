@@ -36,7 +36,7 @@ const deleteTask = async (request, response) => {
     try {
         const { id } = request.params
         const deletedTask = await taskSchema.findByIdAndDelete(id)
-        return response.status(204).json(deletedTask)
+        return response.status(200).json(deletedTask)
     } catch (error) {
         console.log(error)
     }
