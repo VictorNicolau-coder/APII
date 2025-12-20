@@ -5,32 +5,52 @@ const jwt = require('jsonwebtoken');
 const PDFDocument = require("pdfkit")
 
 const getAll = async (request, response) => {
-    const tasks = await taskSchema.find()
-    return response.status(200).json(tasks)
+    try {
+        const tasks = await taskSchema.find()
+        return response.status(200).json(tasks)
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 const getById = async (request, response) => {
-    const { id } = request.params
-    const task = await taskSchema.findById(id)
-    return response.status(200).json(task)
+    try {
+        const { id } = request.params
+        const task = await taskSchema.findById(id)
+        return response.status(200).json(task)
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 const createTask = async (request, response) => {
-    const createdTask = await taskSchema.create(request.body)
-    return response.status(201).json(createdTask)
+    try {
+        const createdTask = await taskSchema.create(request.body)
+        return response.status(201).json(createdTask)
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 const deleteTask = async (request, response) => {
-    const { id } = request.params
-    const deletedTask = await taskSchema.findByIdAndDelete(id)
-    return response.status(204).json(deletedTask)
+    try {
+        const { id } = request.params
+        const deletedTask = await taskSchema.findByIdAndDelete(id)
+        return response.status(204).json(deletedTask)
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 const updateTask = async (request, response) => {
-    const { id } = request.params
-
-    const updatedTask = await taskSchema.findByIdAndUpdate(id, request.body, { new: true })
-    return response.status(201).json(updatedTask)
+    try {
+        const { id } = request.params
+    
+        const updatedTask = await taskSchema.findByIdAndUpdate(id, request.body, { new: true })
+        return response.status(201).json(updatedTask)
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 const searchLogin = async (request, response) => {
@@ -56,25 +76,29 @@ const searchLogin = async (request, response) => {
 }
 
 const gerarPdf = async (request, response) => {
-    const doc = new PDFDocument();
-
-    // Define cabeçalhos HTTP para o navegador baixar o arquivo
-    response.setHeader('Content-Type', 'application/pdf');
-    response.setHeader('Content-Disposition', 'attachment; filename=lista_livros.pdf');
-
-    // “Encanamos” o PDF direto na resposta
-    doc.pipe(response);
-
-    doc.fontSize(18).text("Lista de Tarefas", { align: 'center' });
-    doc.moveDown();
-
-    const tasks = await taskSchema.find()
-
-    tasks.forEach(task => {
-        doc.fontSize(12).text(`ID: ${task.id} | ${task.title} - ${task.status} - ${task.created_at.toLocaleDateString()}`);
-    });
-
-    doc.end();
+    try {
+        const doc = new PDFDocument();
+    
+        // Define cabeçalhos HTTP para o navegador baixar o arquivo
+        response.setHeader('Content-Type', 'application/pdf');
+        response.setHeader('Content-Disposition', 'attachment; filename=lista_livros.pdf');
+    
+        // “Encanamos” o PDF direto na resposta
+        doc.pipe(response);
+    
+        doc.fontSize(18).text("Lista de Tarefas", { align: 'center' });
+        doc.moveDown();
+    
+        const tasks = await taskSchema.find()
+    
+        tasks.forEach(task => {
+            doc.fontSize(12).text(`ID: ${task.id} | ${task.title} - ${task.status} - ${task.created_at.toLocaleDateString()}`);
+        });
+    
+        doc.end();
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 module.exports = {
