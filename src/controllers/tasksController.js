@@ -79,11 +79,9 @@ const gerarPdf = async (request, response) => {
     try {
         const doc = new PDFDocument();
     
-        // Define cabeçalhos HTTP para o navegador baixar o arquivo
         response.setHeader('Content-Type', 'application/pdf');
         response.setHeader('Content-Disposition', 'attachment; filename=lista_livros.pdf');
     
-        // “Encanamos” o PDF direto na resposta
         doc.pipe(response);
     
         doc.fontSize(18).text("Lista de Tarefas", { align: 'center' });
