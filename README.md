@@ -1,6 +1,8 @@
 # LISTA DE TAREFAS
 
-![Descrição](https://www.google.com/url?sa=t&source=web&rct=j&url=https%3A%2F%2Fwww.istockphoto.com%2Fphoto%2Fto-do-list-text-on-notepad-gm1285308242-382184795&ved=0CBUQjRxqFwoTCIDjvtv50ZEDFQAAAAAdAAAAABAI&opi=89978449)
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/197eb19f-744e-4879-93b7-c5941e01372c" alt="Image">
+</p>
 
 ## 📁 Estrutura do Projeto
 
