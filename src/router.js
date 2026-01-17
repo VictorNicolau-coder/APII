@@ -1,8 +1,13 @@
 const express = require('express')
 const tasksController = require('./controllers/tasksController')
 const tasksMiddleware = require('./middlewares/tasksMiddleware')
+const multer = require('multer')
 
 const router = express.Router()
+
+// Armazena o arquivo na memória para enviar ao S3
+const storage = multer.memoryStorage()
+const upload = multer({ storage })
 
 // Rota de login
 router.post(
@@ -24,6 +29,7 @@ router.get(
 
 router.post(
     '/tasks',
+    upload.single('image'),
     tasksMiddleware.authenticate,
     tasksMiddleware.validateTitle, 
     tasksController.createTask

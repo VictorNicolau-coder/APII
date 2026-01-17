@@ -1,8 +1,11 @@
 const taskSchema = require('../models/taskSchema')
 const userSchema = require('../models/userSchema')
+const s3 = require('../config/s3Client');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const PDFDocument = require("pdfkit")
+const PDFDocument = require('pdfkit')
+
+require('dotenv').config();
 
 const getAll = async (request, response) => {
     try {
@@ -24,12 +27,37 @@ const getById = async (request, response) => {
 }
 
 const createTask = async (request, response) => {
-    try {
-        const createdTask = await taskSchema.create(request.body)
-        return response.status(201).json(createdTask)
-    } catch (error) {
-        console.log(error)
+      try {
+    let imageUrl = null
+
+    // Se tiver imagem no request (via multer)
+    if (request.file) {
+      const file = request.file
+      const fileName = `${Date.now()}-${file.originalname}`
+
+      const uploadParams = {
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key: fileName,
+        Body: file.buffer,
+        ContentType: file.mimetype
+      }
+
+      await s3.send(new PutObjectCommand(uploadParams))
+
+      imageUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileName}`
     }
+
+    // Cria a task com o link da imagem (se houver)
+    const createdTask = await taskSchema.create({
+      ...request.body,
+      imageUrl
+    })
+
+    return response.status(201).json(createdTask)
+  } catch (error) {
+    console.log(error)
+    return response.status(500).json({ message: 'Erro ao criar task', error })
+  }
 }
 
 const deleteTask = async (request, response) => {
