@@ -30,6 +30,7 @@ const getById = async (request, response) => {
 
 const createTask = async (request, response) => {
     try {
+        console.log('Bucket recebido:', process.env.BUCKET_NAME);
         let imageUrl = null
 
         // Se tiver imagem no request (via multer)
@@ -37,7 +38,6 @@ const createTask = async (request, response) => {
             const file = request.file
             const fileName = `${Date.now()}-${file.originalname}`
 
-            console.log('Bucket recebido:', process.env.BUCKET_NAME);
             const uploadParams = {
                 Bucket: process.env.BUCKET_NAME,
                 Key: fileName,
