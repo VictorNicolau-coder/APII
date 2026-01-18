@@ -30,7 +30,6 @@ const getById = async (request, response) => {
 
 const createTask = async (request, response) => {
     try {
-        console.log('Bucket recebido:', process.env.BUCKET_NAME);
         let imageUrl = null
 
         // Se tiver imagem no request (via multer)
