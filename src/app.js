@@ -4,7 +4,7 @@ const middleware = require("./middlewares/tasksMiddleware")
 
 const app = express()
 
-app.use(middleware.validateDay)
+//app.use(middleware.validateDay)
 app.use(express.json())
 app.use(router)
 
