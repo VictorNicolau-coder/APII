@@ -93,7 +93,7 @@ const updateTask = async (request, response) => {
             const oldKey = task.imageUrl.split('/').pop() // pega só o nome do arquivo
             await s3.send(
             new DeleteObjectCommand({
-                Bucket: process.env.AWS_BUCKET_NAME,
+                Bucket: process.env.BUCKET_NAME,
                 Key: oldKey,
             })
             )
@@ -101,7 +101,7 @@ const updateTask = async (request, response) => {
 
         // Faz upload da nova imagem
         const uploadParams = {
-            Bucket: process.env.AWS_BUCKET_NAME,
+            Bucket: process.env.BUCKET_NAME,
             Key: fileName,
             Body: file.buffer,
             ContentType: file.mimetype,
@@ -109,7 +109,7 @@ const updateTask = async (request, response) => {
 
         await s3.send(new PutObjectCommand(uploadParams))
 
-        imageUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileName}`
+        imageUrl = `https://${process.env.BUCKET_NAME}.s3.${process.env.BUCKET_REGION}.amazonaws.com/${fileName}`
         }
 
         // Atualiza os campos da task
