@@ -2,7 +2,7 @@ const taskSchema = require('../models/taskSchema')
 const userSchema = require('../models/userSchema')
 const s3 = require('../config/s3Client');
 
-const {PutObjectCommand} = require('@aws-sdk/client-s3')
+const {PutObjectCommand, DeleteObjectCommand} = require('@aws-sdk/client-s3')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const PDFDocument = require('pdfkit')
