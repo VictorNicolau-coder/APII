@@ -100,10 +100,10 @@ Follow these steps to set up the project on your local environment:
 
 ```bash
 # 1️⃣ Clone the repository
-git clone https://github.com/VictorNicolau-coder/APII.git
+git clone https://github.com/VictorNicolau-coder/Task-list.git
 
 # 2️⃣ Enter the project directory
-cd APII
+cd Task-list
 
 # 3️⃣ Install dependencies
 npm install
